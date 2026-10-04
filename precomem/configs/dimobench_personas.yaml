@@ -1,0 +1,186 @@
+# Persona seeds for the DiMoBench construction pipeline (Appendix D.6).
+#
+# Five personas span both Big-Five extremes and different life stages.
+# Slot names and state strings are authoritative: the generator keeps them
+# verbatim and the gold state timeline is derived from them.
+#
+#   base: one attribute slot per persona, one drift at turn 200.
+#   xl:   five attribute slots per persona, three drifts at turns 280 / 580 / 870
+#         (transition index k means "changes at drift k").
+
+base:
+  - persona_id: persona_a
+    life_stage: "early career, 26"
+    big_five: {O: 0.30, C: 0.60, E: 0.85, A: 0.55, N: 0.35}
+    social_circle_hint: [Leo, Leon, Mia]
+    slots:
+      - slot: attitude_toward_social_activities
+        initial_state: "extroverted social enthusiast who organizes group outings (KTV, parties, escape rooms) most weekends"
+        transitions: {1: "values quiet solo time, declines most group invitations and spends weekends alone in cafes or at home"}
+    drift_hints: {1: "burnout after an intense months-long work cycle"}
+
+  - persona_id: persona_b
+    life_stage: "mid career, 32"
+    big_five: {O: 0.55, C: 0.70, E: 0.40, A: 0.65, N: 0.40}
+    social_circle_hint: [Sam, Sami, Dana]
+    slots:
+      - slot: attitude_toward_caffeine
+        initial_state: "starts every morning with coffee and treats cafe visits as a ritual"
+        transitions: {1: "has switched to tea and avoids caffeine after lunch; coffee is no longer part of the routine"}
+    drift_hints: {1: "recurring stomach issues during a stressful project"}
+
+  - persona_id: persona_c
+    life_stage: "mid career, 35"
+    big_five: {O: 0.65, C: 0.85, E: 0.50, A: 0.45, N: 0.30}
+    social_circle_hint: [Yu, Yue, Riley]
+    slots:
+      - slot: attitude_toward_remote_work
+        initial_state: "thrives on the daily office buzz and goes in five days a week by choice"
+        transitions: {1: "prefers a focused remote rhythm and only goes to the office for essential meetings"}
+    drift_hints: {1: "a long commute combined with new caregiving responsibilities at home"}
+
+  - persona_id: persona_d
+    life_stage: "graduate student, 24"
+    big_five: {O: 0.70, C: 0.50, E: 0.55, A: 0.60, N: 0.45}
+    social_circle_hint: [Quinn, Quin, Ash]
+    slots:
+      - slot: attitude_toward_gaming
+        initial_state: "competitive ranked player who grinds ladder matches most evenings"
+        transitions: {1: "plays only occasional casual co-op games and spends evenings on other hobbies"}
+    drift_hints: {1: "thesis pressure and a new relationship"}
+
+  - persona_id: persona_e
+    life_stage: "late career, 41"
+    big_five: {O: 0.80, C: 0.45, E: 0.65, A: 0.50, N: 0.40}
+    social_circle_hint: [Iris, Irys, Wren]
+    slots:
+      - slot: attitude_toward_travel
+        initial_state: "weekend wanderer who books short trips on impulse"
+        transitions: {1: "stays home most weekends, absorbed in a house-renovation project"}
+    drift_hints: {1: "buying a fixer-upper house mid-renovation"}
+
+xl:
+  - persona_id: persona_a_xl
+    life_stage: "early career, 26"
+    big_five: {O: 0.30, C: 0.60, E: 0.85, A: 0.55, N: 0.35}
+    social_circle_hint: [Leo, Leon, Mia]
+    slots:
+      - slot: social_style
+        initial_state: "organizes group outings most weekends and rarely spends an evening alone"
+        transitions: {1: "keeps weekends quiet and solitary, declining most group plans"}
+      - slot: drink_preference
+        initial_state: "drinks two or three coffees a day"
+        transitions: {2: "drinks only herbal tea and has dropped caffeine entirely"}
+      - slot: exercise_habit
+        initial_state: "plays five-a-side football with friends twice a week"
+        transitions: {2: "swims alone early in the morning before work"}
+      - slot: home_city
+        initial_state: "lives in a shared flat in the city center"
+        transitions: {3: "has moved to a quiet suburb an hour outside the city"}
+      - slot: employment_status
+        initial_state: "junior analyst at a consulting firm"
+        transitions: {}
+    drift_hints:
+      1: "burnout after an intense months-long work cycle"
+      2: "a health scare that prompts a lifestyle overhaul"
+      3: "moving in with a partner who works outside the city"
+
+  - persona_id: persona_b_xl
+    life_stage: "mid career, 32"
+    big_five: {O: 0.55, C: 0.70, E: 0.40, A: 0.65, N: 0.40}
+    social_circle_hint: [Sam, Sami, Dana]
+    slots:
+      - slot: drink_preference
+        initial_state: "starts every morning with a flat white from the same cafe"
+        transitions: {1: "has switched to tea and avoids caffeine after lunch"}
+      - slot: employment_status
+        initial_state: "product manager at a mid-sized software company"
+        transitions: {2: "freelance consultant working from home on short contracts"}
+      - slot: exercise_habit
+        initial_state: "runs 5k three mornings a week"
+        transitions: {3: "cycles long distances on weekends and no longer runs"}
+      - slot: social_style
+        initial_state: "small dinners with two or three close friends"
+        transitions: {3: "hosts large monthly gatherings for the whole neighbourhood"}
+      - slot: home_city
+        initial_state: "lives in a rented apartment near the office"
+        transitions: {}
+    drift_hints:
+      1: "recurring stomach issues during a stressful project"
+      2: "being laid off in a reorganization and choosing not to return to full-time work"
+      3: "a knee injury and a new neighbourhood community"
+
+  - persona_id: persona_c_xl
+    life_stage: "mid career, 35"
+    big_five: {O: 0.65, C: 0.85, E: 0.50, A: 0.45, N: 0.30}
+    social_circle_hint: [Yu, Yue, Riley]
+    slots:
+      - slot: employment_status
+        initial_state: "goes into the office five days a week as a team lead"
+        transitions: {1: "works remotely and only visits the office for essential meetings"}
+      - slot: home_city
+        initial_state: "lives in the city, forty minutes from the office"
+        transitions: {2: "has relocated to a coastal town in another region"}
+      - slot: drink_preference
+        initial_state: "black coffee, several cups a day"
+        transitions: {3: "drinks only decaf and sparkling water"}
+      - slot: exercise_habit
+        initial_state: "lifts weights at a gym near the office"
+        transitions: {2: "surfs and does long beach walks"}
+      - slot: social_style
+        initial_state: "after-work drinks with colleagues most Fridays"
+        transitions: {}
+    drift_hints:
+      1: "a long commute combined with new caregiving responsibilities"
+      2: "the company going fully remote, making a move possible"
+      3: "a doctor's advice about sleep and blood pressure"
+
+  - persona_id: persona_d_xl
+    life_stage: "graduate student, 24"
+    big_five: {O: 0.70, C: 0.50, E: 0.55, A: 0.60, N: 0.45}
+    social_circle_hint: [Quinn, Quin, Ash]
+    slots:
+      - slot: social_style
+        initial_state: "competitive ranked gaming with an online squad most evenings"
+        transitions: {1: "occasional casual co-op sessions; evenings mostly spent with a partner"}
+      - slot: exercise_habit
+        initial_state: "rarely exercises beyond walking to campus"
+        transitions: {2: "trains for a half marathon with a running club"}
+      - slot: drink_preference
+        initial_state: "energy drinks during late-night study sessions"
+        transitions: {2: "water and the occasional green tea"}
+      - slot: employment_status
+        initial_state: "PhD student on a scholarship"
+        transitions: {3: "research engineer at an industry lab after defending the thesis"}
+      - slot: home_city
+        initial_state: "lives in student housing on campus"
+        transitions: {}
+    drift_hints:
+      1: "thesis pressure and a new relationship"
+      2: "a running club started by a lab mate"
+      3: "defending the thesis and taking an industry job"
+
+  - persona_id: persona_e_xl
+    life_stage: "late career, 41"
+    big_five: {O: 0.80, C: 0.45, E: 0.65, A: 0.50, N: 0.40}
+    social_circle_hint: [Iris, Irys, Wren]
+    slots:
+      - slot: home_city
+        initial_state: "lives in a small city-center apartment and travels most weekends"
+        transitions: {1: "has bought a fixer-upper house in a nearby town and spends weekends renovating"}
+      - slot: social_style
+        initial_state: "spontaneous trips with a rotating group of friends"
+        transitions: {1: "hosts friends at the house instead of travelling"}
+      - slot: employment_status
+        initial_state: "senior designer at an agency"
+        transitions: {2: "runs a small independent studio from the renovated house"}
+      - slot: exercise_habit
+        initial_state: "hikes on weekend trips"
+        transitions: {3: "does yoga every morning and rarely hikes"}
+      - slot: drink_preference
+        initial_state: "wine with dinner most evenings"
+        transitions: {3: "has stopped drinking alcohol"}
+    drift_hints:
+      1: "buying a house mid-renovation"
+      2: "a redundancy package that funds a studio of their own"
+      3: "a health check-up and a new morning routine"

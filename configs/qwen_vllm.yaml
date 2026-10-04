@@ -1,0 +1,6 @@
+# A Qwen backbone served through an OpenAI-compatible endpoint (vLLM or SGLang), as in the
+# backbone-generalization protocol (Appendix D.2). Set `model` to the name your server serves.
+backbone:
+  provider: openai
+  model: Qwen/Qwen3.5-9B
+  base_url: http://localhost:8000/v1

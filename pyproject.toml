@@ -1,0 +1,83 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "precomem"
+version = "1.0.0"
+description = "PreCoMem: Predictive Cognitive Memory for Self-Evolving Long-Term Dialogue Agents (NeurIPS 2026)"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [
+  { name = "Jian Zhong", email = "zhongjian@mail.nankai.edu.cn" },
+  { name = "Zeyu Liu" },
+  { name = "Pingchuan Cao" },
+  { name = "Rongduo Han" },
+  { name = "Shunye Tang" },
+  { name = "Guohuan Xie" },
+  { name = "Mingyuan Qin" },
+  { name = "Ran Ji" },
+  { name = "Xiao Liang" },
+  { name = "Wei Wang" },
+  { name = "Haining Zhang" },
+]
+keywords = ["long-term memory", "dialogue agents", "LLM agents", "predictive coding", "surprisal", "benchmark"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+  "numpy>=1.24",
+  "pyyaml>=6.0",
+  "openai>=1.30",
+]
+
+[project.optional-dependencies]
+# Neural embedder (Qwen3-Embedding-0.6B) and NLI verifier (DeBERTa-v3 cross-encoder) used in the paper.
+models = ["torch>=2.1", "transformers>=4.51", "sentence-transformers>=2.7"]
+# Gemini auxiliary judges and the DiMoBench verifier.
+gemini = ["google-genai>=1.30"]
+# MNLI matched-dev download for `precomem-calibrate-nli`.
+calibrate = ["datasets>=2.18"]
+dev = ["pytest>=7.4", "ruff>=0.5"]
+all = ["precomem[models,gemini,calibrate,dev]"]
+
+[project.scripts]
+precomem-run = "precomem.cli.run_benchmark:main"
+precomem-demo = "precomem.cli.demo:main"
+precomem-build-dimobench = "precomem.cli.build_dimobench:main"
+precomem-calibrate-nli = "precomem.cli.calibrate_nli:main"
+
+[project.urls]
+Homepage = "https://github.com/ZhongWishing/PreCoMem"
+Repository = "https://github.com/ZhongWishing/PreCoMem"
+Issues = "https://github.com/ZhongWishing/PreCoMem/issues"
+
+[tool.setuptools.packages.find]
+include = ["precomem*"]
+
+[tool.setuptools.package-data]
+precomem = ["py.typed", "configs/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501", "B008", "UP006", "UP007", "UP035", "UP045"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["precomem"]

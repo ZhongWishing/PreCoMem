@@ -1,0 +1,8 @@
+# PreCoMem(DT): adaptive thresholds driven by the user-stability index (Appendix D.5).
+gate:
+  adaptive: true
+  adaptive_window: 50
+  adaptive_weights: [0.5, 0.3, 0.2]
+  adaptive_low_range: [0.10, 0.35]
+  adaptive_high_range: [0.40, 0.80]
+  adaptive_ema: 0.1

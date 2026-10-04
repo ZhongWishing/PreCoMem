@@ -1,0 +1,15 @@
+# Core runtime (installed by `pip install -e .`).
+numpy>=1.24
+pyyaml>=6.0
+openai>=1.30
+
+# Neural embedder and NLI verifier used in the paper (`pip install -e ".[models]"`).
+torch>=2.1
+transformers>=4.51
+sentence-transformers>=2.7
+
+# Gemini auxiliary judges and the DiMoBench verifier (`pip install -e ".[gemini]"`).
+google-genai>=1.30
+
+# NLI temperature calibration on MNLI matched-dev (`pip install -e ".[calibrate]"`).
+datasets>=2.18

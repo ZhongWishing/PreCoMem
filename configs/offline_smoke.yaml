@@ -1,0 +1,6 @@
+# No model downloads: hashing embedder and heuristic contradiction verifier.
+# Only useful for smoke-testing the pipeline; the numbers will not match the paper.
+embedding:
+  provider: hashing
+nli:
+  model: heuristic

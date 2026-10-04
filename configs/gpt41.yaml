@@ -1,0 +1,4 @@
+# The gpt-4.1 backbone of the second LoCoMo block of Table 1.
+# Usage: precomem-run --benchmark locomo --data data/locomo10.json --config configs/gpt41.yaml
+backbone:
+  model: gpt-4.1

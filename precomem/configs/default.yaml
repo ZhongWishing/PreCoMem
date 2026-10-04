@@ -1,0 +1,95 @@
+# Default configuration for PreCoMem.
+#
+# Every field is read into the typed dataclasses in ``precomem/config.py``;
+# unknown keys raise an error, so typos cannot silently fall back to defaults.
+# The values below are the settings of the paper's main experiments.
+
+backbone:
+  provider: openai              # openai | gemini (any OpenAI-compatible endpoint via base_url)
+  model: gpt-4o-mini
+  base_url: null                # e.g. http://localhost:8000/v1 for vLLM-served Qwen backbones
+  temperature: 0.0
+  max_tokens: 1024
+  request_timeout: 60
+  max_retries: 6
+  json_mode: true               # ask the API for a JSON object when a sub-agent expects JSON
+  extra_params: {}              # merged into every request, e.g. {reasoning_effort: minimal} for reasoning models
+
+embedding:
+  provider: huggingface         # huggingface | hashing (offline fallback)
+  model: Qwen/Qwen3-Embedding-0.6B
+  device: auto                  # cuda | cpu | mps | auto
+  batch_size: 32
+  max_seq_len: 512
+  fallback_dim: 256             # dimension of the hashing embedder used when the model is unavailable
+
+nli:
+  model: cross-encoder/nli-deberta-v3-base
+  device: auto
+  temperature: 1.0              # scalar T fitted on MNLI matched-dev with `precomem-calibrate-nli`
+  batch_size: 16
+  max_length: 256
+
+retrieval:
+  top_k: 10                     # K in Eq. (1)
+  alpha:                        # convex weights (alpha_1, alpha_2, alpha_3) over (s_sem, s_fact, s_topic)
+    semantic: 0.4
+    bm25: 0.4
+    topic: 0.2
+  bm25_k1: 1.5
+  bm25_b: 0.75
+  topic_new_threshold: 0.5      # cosine below which a written item opens a new topic prototype
+  short_term_window: 6          # |Q_{t-1}| in turns
+  episodic_capacity: 20000      # fixed-capacity eviction for the episodic cache E_t
+  max_provenance_traces: 8      # episodic excerpts appended to the Top-K evidence (paper: at most eight)
+
+surprisal:
+  lambda: 0.5                   # mixing weight in S_raw = lambda d_sem + (1 - lambda) d_conf   (Eq. 4)
+  reliability_eps: 1.0e-9       # epsilon in the smoothed normalization of Eq. (3)
+
+gate:
+  theta_low: 0.2
+  theta_high: 0.6
+  adaptive: false               # true enables PreCoMem(DT), the adaptive-threshold variant
+  adaptive_window: 50           # W
+  adaptive_weights: [0.5, 0.3, 0.2]   # (omega_1, omega_2, omega_3) over (psi_corr, psi_life, psi_var)
+  adaptive_low_range: [0.10, 0.35]
+  adaptive_high_range: [0.40, 0.80]
+  adaptive_ema: 0.1             # mu
+  adaptive_kappa: 1.0           # kappa in psi_var = exp(-kappa Var[S_eff])
+  adaptive_ref_lifespan: 50     # L_ref in psi_life = min(1, L_belief / L_ref)
+
+operators:
+  maintain:
+    eta_min: 0.05               # clip range for the Maintain-Agent's evidence_strength
+    eta_max: 1.0
+  profile:
+    explicit_band: [0.60, 0.70] # [w_min, w_max] for explicit-event hypotheses
+    latent_band: [0.50, 0.59]   # [w_min, w_max] for latent-inference hypotheses
+  correct:
+    beta: 1.0                   # correction strength in Eq. (10)
+    new_fact_weight: 0.85       # weight of the fresh belief node written by CORRECT (stable FACTs sit at w >= 0.80)
+
+lifecycle:
+  promote_threshold: 0.80       # tau_promote
+  hypothesis_prune: 0.10        # hypotheses below this weight are removed
+  decay_gamma: 0.05             # gamma in Eq. (9)
+  fact_optional_prune: null     # facts are never hard-deleted; set e.g. 0.05 for the fact-pruning ablation (Appendix D.7)
+
+# Ablations and controls from the paper. All off for the main results.
+ablation:
+  es: false                     # gate score forced to 0: every evidence-bearing turn -> MAINTAIN
+  rr: false                     # rho_t = 1 (no retrieval-reliability adjustment)
+  cw: false                     # all belief weights overwritten to 1 (retrieval + lifecycle)
+  read_time_weighting: true     # false drops w_t(m) from the retrieval score only (factorial control)
+  without_maintain: false
+  without_profile: false        # medium-surprisal observations committed directly as FACTs (no waiting room)
+  without_correct: false
+  single_threshold: false       # medium band routed to CORRECT
+  random_routing: null          # e.g. [0.562, 0.274, 0.164] = frequency-matched random MAINTAIN/PROFILE/CORRECT
+
+evaluation:
+  primary_judge: gpt-4.1-mini
+  aux_judges: [gemini-2.5-flash, gemini-2.5-flash]
+  seeds: [13, 42, 1234]
+  num_workers: 4                # benchmark samples evaluated concurrently (LLM-bound threads)
