@@ -6,7 +6,7 @@
 
 English | [简体中文](README_zh.md)
 
-[![NeurIPS 2026](https://img.shields.io/badge/NeurIPS-2026-4b44ce.svg)](#citation)
+![NeurIPS 2026](https://img.shields.io/badge/NeurIPS-2026-4b44ce.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](pyproject.toml)
 [![tests](https://github.com/ZhongWishing/PreCoMem/actions/workflows/tests.yml/badge.svg)](https://github.com/ZhongWishing/PreCoMem/actions/workflows/tests.yml)
@@ -300,18 +300,6 @@ pytest
 ```
 
 The suite runs offline in a few seconds. It checks the closed-form updates against the worked examples of the paper, such as the `PROFILE` initialization $w_0 = 0.6549$ (Appendix C.3) and the eight-turn no-support horizon of an unsupported latent hypothesis. It also covers the gate, the lifecycle, retrieval, every ablation switch, the benchmark loaders, the runner with anchored questions, the provider clients and the complete DiMoBench pipeline with scripted generator and verifier doubles.
-
-## Citation
-
-```bibtex
-@inproceedings{zhong2026precomem,
-  title     = {{PreCoMem}: Predictive Cognitive Memory for Self-Evolving Long-Term Dialogue Agents},
-  author    = {Zhong, Jian and Liu, Zeyu and Cao, Pingchuan and Han, Rongduo and Tang, Shunye and
-               Xie, Guohuan and Qin, Mingyuan and Ji, Ran and Liang, Xiao and Wang, Wei and Zhang, Haining},
-  booktitle = {Advances in Neural Information Processing Systems},
-  year      = {2026}
-}
-```
 
 ## License
 
