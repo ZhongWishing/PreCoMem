@@ -1,0 +1,9 @@
+benchmark,variant,accuracy
+LoCoMo,full,73.57
+LoCoMo,no_rr,56.81
+LoCoMo,no_weight,43.42
+LoCoMo,no_surp,31.46
+LongMemEval,full,84.28
+LongMemEval,no_rr,64.97
+LongMemEval,no_weight,49.65
+LongMemEval,no_surp,36.21

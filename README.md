@@ -41,10 +41,11 @@ Hypotheses are promoted to facts after repeated support and pruned when support 
 This repository contains:
 
 - `precomem/`: the framework (Algorithm 1 of the paper) with typed configuration, per-turn traces and memory persistence.
-- An evaluation harness for LoCoMo, LongMemEval-S, PersonaMem-v2 and DiMoBench that uses the QA and judge prompts of Appendix F verbatim.
+- An evaluation harness for LoCoMo, LongMemEval-S, PersonaMem-v2 and DiMoBench that uses the QA and judge prompts of the paper verbatim (`precomem/evaluation/prompts.py`; Appendix D of the paper points here).
 - The six-stage generator–verifier construction pipeline of **DiMoBench** and **DiMoBench-XL**.
 - A configuration switch for every ablation and control reported in the paper.
 - Offline unit tests that need no API keys and no model downloads.
+- `paper/`: the aggregated results behind Figures 3, 4 and 5 and the scripts that draw them.
 
 ## Installation
 
@@ -80,7 +81,7 @@ PreCoMem is training-free and ships no weights of its own. It relies on two publ
 - dense embeddings: [`Qwen/Qwen3-Embedding-0.6B`](https://huggingface.co/Qwen/Qwen3-Embedding-0.6B)
 - contradiction verifier: [`cross-encoder/nli-deberta-v3-base`](https://huggingface.co/cross-encoder/nli-deberta-v3-base)
 
-The only fitted quantity is the scalar temperature $T$ of the verifier (Appendix C.2), fitted on the MNLI matched development split:
+The only fitted quantity is the scalar temperature $T$ of the verifier (Appendix B.2), fitted on the MNLI matched development split:
 
 ```bash
 precomem-calibrate-nli --out configs/nli.yaml    # afterwards pass --config configs/nli.yaml
@@ -152,7 +153,7 @@ precomem-run --benchmark dimobench --data data/dimobench_xl/suite.json
 | Flag | Purpose |
 |---|---|
 | `--backbone gpt-4.1`, `--base-url http://host:8000/v1` | choose the backbone; any OpenAI-compatible endpoint works |
-| `--config configs/dynamic_threshold.yaml` | PreCoMem(DT), the adaptive-threshold variant (Appendix D.5) |
+| `--config configs/dynamic_threshold.yaml` | PreCoMem(DT), the adaptive-threshold variant (Appendix C.5) |
 | `--set retrieval.top_k=5 --set gate.theta_high=0.7` | override any configuration field |
 | `--seeds 13 --limit 20 --workers 8` | partial or faster runs |
 | `--skip-judge` | inference only |
@@ -201,7 +202,7 @@ The strongest baseline, EverMemOS, reaches 82.32 (gpt-4o-mini) and 86.16 (gpt-4.
 
 **DiMoBench** (Figure 4). After the change point, PreCoMem recovers fastest and stabilizes at 84%. EverMemOS, TiMem and O-Mem plateau at 78–80%.
 
-The AMemGym and LoCoMo-Plus results of Appendix D.1 follow those benchmarks' official protocols and are not covered by the runners in this repository.
+The AMemGym and LoCoMo-Plus results of Appendix C.1 follow those benchmarks' official protocols and are not covered by the runners in this repository.
 
 ## Ablations and controls
 
@@ -230,7 +231,7 @@ precomem-run --benchmark dimobench --data data/dimobench/suite.json --set ablati
 
 ## DiMoBench and DiMoBench-XL
 
-DiMoBench isolates the *write path* under gradual, implicit belief drift with adversarial retrieval interference. `precomem/dimobench/` implements the six-stage construction pipeline of Appendix D.6 with a strict separation between the generator and the verifier.
+DiMoBench isolates the *write path* under gradual, implicit belief drift with adversarial retrieval interference. `precomem/dimobench/` implements the six-stage construction pipeline of Appendix C.6 with a strict separation between the generator and the verifier.
 
 | Stage | What | Model |
 |:-:|---|---|
@@ -289,6 +290,7 @@ precomem/
   cli/              precomem-run, precomem-demo, precomem-build-dimobench, precomem-calibrate-nli
   configs/          default.yaml and dimobench_personas.yaml
 configs/            example override files (gpt-4.1, PreCoMem(DT), vLLM backbone, offline smoke test)
+paper/              aggregated results (CSV) and plotting scripts for Figures 3-5
 tests/              offline unit tests
 ```
 
@@ -299,7 +301,7 @@ pip install -e ".[dev]"
 pytest
 ```
 
-The suite runs offline in a few seconds. It checks the closed-form updates against the worked examples of the paper, such as the `PROFILE` initialization $w_0 = 0.6549$ (Appendix C.3) and the eight-turn no-support horizon of an unsupported latent hypothesis. It also covers the gate, the lifecycle, retrieval, every ablation switch, the benchmark loaders, the runner with anchored questions, the provider clients and the complete DiMoBench pipeline with scripted generator and verifier doubles.
+The suite runs offline in a few seconds. It checks the closed-form updates against the worked examples of the paper, such as the `PROFILE` initialization $w_0 = 0.6549$ (Appendix B.3) and the eight-turn no-support horizon of an unsupported latent hypothesis. It also covers the gate, the lifecycle, retrieval, every ablation switch, the benchmark loaders, the runner with anchored questions, the provider clients and the complete DiMoBench pipeline with scripted generator and verifier doubles.
 
 ## License
 

@@ -41,10 +41,11 @@ Jian Zhong<sup>1*</sup>, Zeyu Liu<sup>1*</sup>, Pingchuan Cao<sup>1</sup>, Rongd
 本仓库包含：
 
 - `precomem/`：框架本体（论文算法 1），带类型化配置、逐轮轨迹记录和记忆持久化。
-- LoCoMo、LongMemEval-S、PersonaMem-v2 和 DiMoBench 的评测框架，QA 与评判 prompt 与附录 F 逐字一致。
+- LoCoMo、LongMemEval-S、PersonaMem-v2 和 DiMoBench 的评测框架，QA 与评判 prompt 与论文逐字一致（`precomem/evaluation/prompts.py`，论文附录 D 指向这里）。
 - **DiMoBench** 与 **DiMoBench-XL** 的六阶段"生成器–验证器"构建流程。
 - 论文中每一项消融与对照实验对应的配置开关。
 - 无需 API key、无需下载模型的离线单元测试。
+- `paper/`：论文图 3、4、5 背后的汇总结果与绘图脚本。
 
 ## 安装
 
@@ -80,7 +81,7 @@ PreCoMem 无需训练，也不附带自有权重。它依赖两个公开模型�
 - 稠密嵌入：[`Qwen/Qwen3-Embedding-0.6B`](https://huggingface.co/Qwen/Qwen3-Embedding-0.6B)
 - 矛盾验证器：[`cross-encoder/nli-deberta-v3-base`](https://huggingface.co/cross-encoder/nli-deberta-v3-base)
 
-唯一需要拟合的量是验证器的标量温度 $T$（附录 C.2），在 MNLI matched 开发集上拟合：
+唯一需要拟合的量是验证器的标量温度 $T$（附录 B.2），在 MNLI matched 开发集上拟合：
 
 ```bash
 precomem-calibrate-nli --out configs/nli.yaml    # 之后用 --config configs/nli.yaml 传入
@@ -152,7 +153,7 @@ precomem-run --benchmark dimobench --data data/dimobench_xl/suite.json
 | 参数 | 作用 |
 |---|---|
 | `--backbone gpt-4.1`、`--base-url http://host:8000/v1` | 指定主干模型；任何 OpenAI 兼容服务均可 |
-| `--config configs/dynamic_threshold.yaml` | PreCoMem(DT)，即自适应阈值变体（附录 D.5） |
+| `--config configs/dynamic_threshold.yaml` | PreCoMem(DT)，即自适应阈值变体（附录 C.5） |
 | `--set retrieval.top_k=5 --set gate.theta_high=0.7` | 覆盖任意配置项 |
 | `--seeds 13 --limit 20 --workers 8` | 部分运行或加速运行 |
 | `--skip-judge` | 只做推理，不评判 |
@@ -201,7 +202,7 @@ precomem-run --benchmark dimobench --data data/dimobench_xl/suite.json
 
 **DiMoBench**（图 4）。偏好发生转变后，PreCoMem 恢复最快并稳定在 84%，而 EverMemOS、TiMem 和 O-Mem 停留在 78–80%。
 
-附录 D.1 中 AMemGym 和 LoCoMo-Plus 的结果按照这两个基准的官方协议得到，不在本仓库评测脚本的覆盖范围内。
+附录 C.1 中 AMemGym 和 LoCoMo-Plus 的结果按照这两个基准的官方协议得到，不在本仓库评测脚本的覆盖范围内。
 
 ## 消融与对照实验
 
@@ -230,7 +231,7 @@ precomem-run --benchmark dimobench --data data/dimobench/suite.json --set ablati
 
 ## DiMoBench 与 DiMoBench-XL
 
-DiMoBench 专门考察在渐进、隐式的信念漂移和对抗性检索干扰下的*写路径*。`precomem/dimobench/` 实现了附录 D.6 的六阶段构建流程，并严格分离生成器与验证器。
+DiMoBench 专门考察在渐进、隐式的信念漂移和对抗性检索干扰下的*写路径*。`precomem/dimobench/` 实现了附录 C.6 的六阶段构建流程，并严格分离生成器与验证器。
 
 | 阶段 | 内容 | 模型 |
 |:-:|---|---|
@@ -289,6 +290,7 @@ precomem/
   cli/              precomem-run、precomem-demo、precomem-build-dimobench、precomem-calibrate-nli
   configs/          default.yaml 与 dimobench_personas.yaml
 configs/            示例覆盖配置（gpt-4.1、PreCoMem(DT)、vLLM 主干、离线冒烟测试）
+paper/              图 3–5 的汇总结果（CSV）与绘图脚本
 tests/              离线单元测试
 ```
 
@@ -299,7 +301,7 @@ pip install -e ".[dev]"
 pytest
 ```
 
-测试全部离线运行，几秒内完成。测试用论文中的算例核对闭式更新，例如 `PROFILE` 初始化 $w_0 = 0.6549$（附录 C.3），以及未获支持的潜在推断类假设在连续 8 轮无支持后被剪除。测试还覆盖门控、生命周期、检索、每个消融开关、各基准加载器、带锚定提问的评测运行器、模型调用客户端，以及使用脚本化生成器与验证器替身的完整 DiMoBench 流程。
+测试全部离线运行，几秒内完成。测试用论文中的算例核对闭式更新，例如 `PROFILE` 初始化 $w_0 = 0.6549$（附录 B.3），以及未获支持的潜在推断类假设在连续 8 轮无支持后被剪除。测试还覆盖门控、生命周期、检索、每个消融开关、各基准加载器、带锚定提问的评测运行器、模型调用客户端，以及使用脚本化生成器与验证器替身的完整 DiMoBench 流程。
 
 ## 许可证
 
