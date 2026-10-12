@@ -198,7 +198,7 @@ def _draw_frontier(ax: plt.Axes) -> None:
     )
 
     ax.set_title(
-        "(a) Accuracy--Efficiency Frontier",
+        "(a) Accuracy\u2013Efficiency Frontier",
         fontsize=FS_TITLE,
         pad=6.0,
         fontweight="bold",
